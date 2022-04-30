@@ -1,0 +1,135 @@
+/*General CSS*/
+body {
+    background-color: black;
+    font-family: Helvetica;
+}
+
+#menu {
+    border-bottom: solid 6px turquoise;
+    background-color: black;
+    color: #fff;
+    height: 10vh;
+    display: inline;
+    float: left;
+    font-size: 20px;
+}
+
+#menu #brand{
+    height: 8vh;
+    width: 30%;
+    border-right: turquoise;
+}
+
+#menu ul{
+    margin-top: 35px;
+    margin-left: 20px;
+    list-style-type: none;
+}
+
+#menu #search{
+    margin-top: 35px;
+    float: right;
+}
+
+#menu form button {
+    background-color: #494949;
+}
+
+#menu form button:hover {
+    background-color: #494949;
+    color: #a9a9a9;
+}
+
+#menu #brand img{
+    margin-right: 40px;
+    margin-bottom: 10px;
+}
+
+#menu a {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    list-style-type: none;
+    text-align: center;
+    padding:15px;
+    margin: 0;
+}
+#menu a:hover {
+    color: #2a6496;
+}
+
+#menu #loginButton, #logoutButton {
+    margin-top: 3.6vh;
+    margin-right: 4vh;
+    float: right;
+}
+
+#content {
+    color: black;
+    background-color: white;
+    min-height: 70vh;
+    margin-left: 2vh;
+    margin-bottom: 2vh;
+    border-radius: 10px;
+}
+
+#requests {
+    color: black;
+    background-color: white;
+    min-height: 70vh;
+    margin-left: 7vh;
+    margin-bottom: 2vh;
+    border-radius: 10px;
+}
+
+#footer {
+    margin: auto;
+    text-align: center;
+    padding-top: 6vh;
+    padding-bottom: 2vh;
+    background-color: #5a005a;
+    color: #fff;
+    min-height: 20vh;
+}
+
+/*Login Page CSS*/
+#content-intro {
+    color: white;
+    padding-top: 30vh;
+    padding-bottom: 10vh;
+    min-height: 80vh;
+}
+
+#login{
+    display: inline-block;
+    border: #2a6496 solid 4px;
+    padding: 20px;
+}
+
+#login input{
+    margin-bottom: 15px;
+}
+
+#login-image{
+    float: right;
+}
+/*Logged in Pages CSS*/
+
+#table {
+    overflow: auto;
+}
+
+table td {
+    padding: 1vh;
+}
+table img {
+    max-width: 100px;
+}
+
+#notifications{
+    overflow: auto;
+}
+
+#notifications img{
+    max-width: 50px;
+}

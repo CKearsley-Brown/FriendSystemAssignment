@@ -1,0 +1,61 @@
+<?php require('template/header.phtml') ?>
+
+    <h3>Search</h3>
+    <p>
+        Here are your search results.
+    <hr>
+    <h3>List of users!</h3>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
+        <div class="col-auto">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                <?php
+                if (isset($_SESSION['loggedIn'])) {
+                    echo '
+                          <tr>
+                            <th>Profile Picture</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email-Address</th>
+                            <th>Activity-Time</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th></th>
+                            </tr>
+                </thead>
+                <tbody>';
+                    if ($_SESSION['loggedIn']) {
+                        foreach ($view->usersDataSet as $userData) {
+                            echo '<form action="search.php" method="post">' .
+                                '<tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                '<td><input type="hidden" name="friend" value="' . $userData->getUsername() .'">' . $userData->getUsername() . '</td>' .
+                                '<td>' . $userData->getName() . '</td>' .
+                                '<td>' . $userData->getEmailAddress() . '</td>' .
+                                '<td>' . $userData->getActivityTime() . '</td>' .
+                                '<td>' . $userData->getLatitude() . '</td>' .
+                                '<td>' . $userData->getLongitude() . '</td>' .
+                                '<td><button name="addButton" type="submit">Add</input></td>' .
+                                '</tr></form>';
+                        }
+                    }
+                }
+                else{
+                    echo '
+                <tr>
+                    <th>Profile Picture</th>
+                    <th>Username</th>
+                </tr>
+                </thead>
+                <tbody>';
+                        foreach ($view->usersDataSet as $userData) {
+                            echo '<tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                '<td>' . $userData->getUsername() . '</td>' .
+                                '</tr>';
+                        }
+                }?>
+                </tbody>
+            </table>
+        </div>
+    </form>
+    </div>
+<?php require('template/footer.phtml') ?>

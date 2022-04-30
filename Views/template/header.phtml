@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/css/my-style.css" rel="stylesheet">
+
+    <title>Best Teas - <?php echo $view->pageTitle; ?></title>
+</head>
+<body role="document">
+<div class="container-fluid"
+     <!--Menu/Navigation Bar-->
+    <div class="row">
+        <nav id="menu" class="navbar navbar-light bg-light col-lg-12">
+            <a id="brand" class="navbar-brand" href="index.php">
+                <img src="images/logo.jpg" alt="Best Teas Logo" />
+                Best Teas <?php echo $view->pageTitle ?> Page
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="friends.php">Friends</a></li>
+            </ul>
+            <form method="post" action="search.php" id="search" class="form-inline">
+                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search" pattern="[^()/><\][\\\x22,;|]+">
+                <button class="btn btn-outline-success my-2 my-sm-0" name="searchButton" type="submit">Search</button>
+            </form>
+            <form id="logButton" method="post" action="logincontroller.php" class="form-inline">
+                <?php
+                if(isset($_SESSION['loggedIn'])) {
+                    echo '<a href="index.php"><input id="loginButton" type="submit" name="logoutButton" value="Logout" class="form-control"></a>';
+                }
+                else{
+                    echo '<a href="index.php"><input id="logoutButton" type="submit" name="loginButton" value="Login" class="form-control"></a>';
+                }
+                ?>
+            </form>
+        </nav>
+    </div>
+    <!--Main Body of the page starts here -->
+    <div class="row">
+        <!--Friend Notifications -->
+        <div id="requests" class="col-md-3">
+            <h3>Friend Notifications</h3>
+            <?php
+            if(isset($_SESSION['loggedIn'])) {
+                foreach ($view->userDataSet as $userData) {
+                    echo '<table id="notifications">
+                            <tbody>
+                                <tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                '<td>' . $userData->getUsername() . '</td>' .
+                                '<td><button name="acceptButton" type="submit">Accept</input></td>' .
+                                '<td><button name="rejectButton" type="submit">Reject</input>.</td>' .
+                                '</tr>
+                            </tbody>
+                        </table>';
+                }
+            }
+            else{
+                echo 'You must be logged in to see notifications.';
+            }?>
+        </div>
+        <!--Main content and pages are under here-->
+        <div id="content" class="col-md-8">

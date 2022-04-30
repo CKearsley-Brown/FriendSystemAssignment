@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/css/my-style.css" rel="stylesheet">
+
+    <title>Best Teas - <?php echo $view->pageTitle; ?></title>
+</head>
+<body>
+<div class="container-fluid">
+<div id="content-intro">
+    <div id="login-intro" class="row rows-cols-auto">
+        <div class="col-md-4">
+            <img id="login-image" src="/images/big-logo.png">
+        </div>
+        <div class="col-md-3">
+            <h2>Welcome to the Best Teas</h2>
+            <h3>Time to get the partea started!</h3>
+            <p>Welcome to Best Teas, the online site where you can make friends to have a equalitea time! (ﾉ◕ヮ◕)ﾉ</p>
+        </div>
+        <div id="login" class="col-md-3">
+            <?php
+            if(isset($_POST['confirmButton']))
+            {
+                echo $message;
+            }
+
+            if(isset($_POST['loginButton']))
+            {
+                echo 'Either the username or password is invalid';
+            }
+
+            if(isset($_POST['registerButton']))
+            {
+                echo '
+            <!--Forms that requires certain input for the appropriate inputs.
+            Restricts abnormal special characters to protect against a sql 
+            injection attack-->
+            <form method="post" action="registeruser.php" class="form text-primary">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <label for="name">Email Address</label>
+                <input type="email" name="email" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <input type="submit" name="confirmButton" value="Register" class="form-control">
+                <hr>
+            </form>
+            <form method="post">
+                <input type="submit" value="Back" class="form-control">
+            </form>';
+            }
+            else{
+            if (!isset($_SESSION["login"])) {
+                echo ' 
+            <form method="post" action="logincontroller.php" class="form text-primary">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" pattern="[^()/><\][\\\x22,;|]+" required>
+                <input type="submit" name="loginButton" value="Login" class="form-control">
+                <hr>
+            </form>
+            <form method="post">
+                <input type="submit" name="registerButton" value="Create Account" class="form-control">
+            </form>
+            <a href="home.php">Click here to proceed as an anonymous user</a>';
+            }
+            }
+            ?>
+        </div>
+    </div>
+<?php require('template/footer.phtml') ?>

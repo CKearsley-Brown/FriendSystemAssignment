@@ -1,0 +1,43 @@
+<?php require('template/header.phtml') ?>
+
+<h3>Friends List</h3>
+
+<p>
+    <?php
+    if(isset($_SESSION['loggedIn']))
+    {
+        echo 'Here are the list of your friends.';
+    }
+    else{
+        echo 'You must be logged in to see friends.';
+    }
+    ?>
+</p>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
+    <div class="col-auto">
+        <table class="table table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email-Address</th>
+                <th>Profile-Picture</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            if(isset($_SESSION['loggedIn'])) {
+                foreach ($view->usersDataSet as $userData) {
+                    echo '<tr><td>' . $userData->getUsername() . '</td>' .
+                        '<td>' . $userData->getName() . '</td>' .
+                        '<td>' . $userData->getEmailAddress() . '</td>' .
+                        '<td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                        '</tr>';
+                }
+            } ?>
+            </tbody>
+        </table>
+    </div>
+</form>
+</div>
+<?php require('template/footer.phtml') ?>

@@ -1,0 +1,51 @@
+<?php require('template/header.phtml') ?>
+
+    <h3>Welcome to the Home Page</h3>
+    <p>
+        Welcome to the Best Teas website! Here you can make and learn friends. Start the search for friends via
+        he search bar in the navigation bar.
+    </p>
+    <p>
+        When you find a friend, add them using the 'add friend' button. The friend will see your request and either
+        accept or deny the request. People can also add you as a friend. Once this happens, you will see a notification
+        on the left hand side.
+    </p>
+    <p>
+        Finally, once friends have been added, you will able to see your list of friends in the friends page.
+    </p>
+    <p>
+        Have fun! \ (•◡•) /
+    </p>
+    <hr>
+    <h3>List of current users!</h3>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
+        <div class="col-auto">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email-Address</th>
+                    <th>Profile-Picture</th>
+                    <th>Activity-time</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($view->usersDataSet as $userData) {
+                    echo '<tr><td>' . $userData->getUsername() . '</td>' .
+                        '<td>' . $userData->getName() . '</td>' .
+                        '<td>' . $userData->getEmailAddress() . '</td>' .
+                        '<td><img src="/images/'. $userData->getProfilePicture() . '"</td>' .
+                        '<td>' . $userData->getActivityTime() . '</td>' .
+                        '<td>' . $userData->getLatitude() . '</td>' .
+                        '<td>' . $userData->getLongitude() . '</td>' .
+                        '</tr>';
+                } ?>
+                </tbody>
+            </table>
+        </div>
+    </form>
+    </div>
+<?php require('template/footer.phtml') ?>
