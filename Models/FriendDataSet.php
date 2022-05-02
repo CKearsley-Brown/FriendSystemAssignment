@@ -47,7 +47,7 @@ class FriendDataSet
         $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
         //var_dump($user);
         $username = $user->getUsername();
-        $sqlQuery = 'SELECT * FROM Friends WHERE sender="' . $username . '" OR recipient="' . $username . '" AND status=1';
+        $sqlQuery = 'SELECT * FROM Friends WHERE sender="' . $username . '"AND status=1 OR recipient="' . $username . '" AND status=1';
 
         //echo $sqlQuery;
 
@@ -145,7 +145,7 @@ class FriendDataSet
         $statement->execute();
 
         $row = $statement->fetch();
-        var_dump($row);
+        //var_dump($row);
 
         if($row != null)
             return true;
@@ -165,6 +165,14 @@ class FriendDataSet
         $sqlQuery = 'UPDATE Friends Set status=1 WHERE sender="' . $friend . '" AND recipient ="' . $username .'"';
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
+
+        try {
+            $sqlQuery = 'DELETE FROM Friends WHERE sender="' . $username. '" AND recipient ="' . $friend .'"';
+            $statement = $this->_dbHandle->prepare($sqlQuery);
+            $statement->execute();
+        } catch(Exception $e) {
+
+        }
     }
 
     /**

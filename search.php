@@ -35,7 +35,13 @@ if (isset($_POST["addButton"])) {
     //var_dump($_POST["friend"]);
     $friendDataSet = new FriendDataSet();
     try {
-        $friendDataSet->addFriend($_POST["friend"]);
+        if($friendDataSet->friendCheck($_POST['friend']) == false)
+        {
+            $friendDataSet->addFriend($_POST["friend"]);
+        }
+        else{
+            $resultsMessage = "Already friends with this user.";
+        }
     } catch (Exception $e)
     {
         $resultsMessage = "An application already exists.";
