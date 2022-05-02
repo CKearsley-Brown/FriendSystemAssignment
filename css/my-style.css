@@ -133,3 +133,13 @@ table img {
 #notifications img{
     max-width: 50px;
 }
+
+#paginationNum {
+    color:red;
+    font-size:30px;
+    margin-left:20px;
+    background-color: #afafaf;
+    border: solid black 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

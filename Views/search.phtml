@@ -64,6 +64,12 @@
                 }?>
                 </tbody>
             </table>
+            <?php
+            for($page=1; $page<=$view->numberOfPages;$page++)
+            {
+                echo '<a id="paginationNum" href="search.php?page=' . $page . '">' . $page . '</a> ';
+            }
+            ?>
         </div>
     </form>
     </div>

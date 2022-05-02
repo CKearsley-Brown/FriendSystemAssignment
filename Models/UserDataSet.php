@@ -177,4 +177,41 @@ class UserDataSet {
         }
         return $dataSet;
     }
+
+    /**
+     * This method searches for users in the user database then
+     * readys it for pagination. It does a search in the database
+     * via SQL. It will then return this information.
+     */
+    public function paginationSearchUsers($user, $startingLimit, $limit) {
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '" LIMIT ' . $startingLimit . ', ' . $limit . ' ';
+
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
+
+        $dataSet=[];
+        while ($row = $statement->fetch()) {
+            $dataSet[] = new UserData($row);
+        }
+        return $dataSet;
+    }
+
+    /**
+     * This method searches for users in the user database. It does
+     * this through a search in the database via SQL. It will then
+     * return this information.
+     */
+    public function getNumberOfUsers($user) {
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '"';
+
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
+
+        $dataSet=[];
+        while ($row = $statement->fetch()) {
+            $dataSet[] = new UserData($row);
+        }
+
+        return count($dataSet);
+    }
 }

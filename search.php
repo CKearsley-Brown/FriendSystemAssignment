@@ -20,10 +20,36 @@ if (isset($_SESSION['loggedIn'])) {
     }
 }
 
+//Pagination
+$resultPerPage = 10;
+$searchDataSet = new UserDataSet();
+//$numberOfUsers = $searchDataSet->getNumberOfUsers();
+//$view->numberOfPages = ceil($numberOfUsers/$resultPerPage);
+//var_dump($view->numberOfPages);
+$search="";
+
 //This is used to search users on the website
 if (isset($_POST["searchButton"])) {
     $searchDataSet = new UserDataSet();
-    $view->usersDataSet = $searchDataSet->searchUsers($_POST["search"]);
+    //Orginal - $view->usersDataSet = $searchDataSet->searchUsers($_POST["search"]);
+    $search = $_POST["search"];
+
+    $numberOfUsers = $searchDataSet->getNumberOfUsers($search);
+    //var_dump($numberOfUsers);
+    $view->numberOfPages = ceil($numberOfUsers/$resultPerPage);
+
+    $view->usersDataSet = $searchDataSet->paginationSearchUsers($search, 0, $resultPerPage);
+}
+
+if(isset($_GET['page']))
+{
+    $numberOfUsers = $searchDataSet->getNumberOfUsers($search);
+    $view->numberOfPages = ceil($numberOfUsers/$resultPerPage);
+
+    $pageInt = (int) $_GET['page'];
+    $startingLimit = ($pageInt-1)*$resultPerPage;
+    $searchDataSet = new UserDataSet();
+    $view->usersDataSet = $searchDataSet->paginationSearchUsers($search, $startingLimit, $resultPerPage);
 }
 
 //This is used for the user to add a friend
