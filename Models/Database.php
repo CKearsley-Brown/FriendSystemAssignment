@@ -52,11 +52,11 @@ class Database
      */
     public function getdbConnection()
     {
-        return $this->_dbHandle; // returns the PDO handle to be used                                        elsewhere
+        return $this->_dbHandle; // returns the PDO handle to be used elsewhere
     }
 
     public function __destruct()
     {
-        $this->_dbHandle = null; // destroys the PDO handle when no longer needed                                        longer needed
+        $this->_dbHandle = null; // destroys the PDO handle when no longer needed
     }
 }

@@ -36,7 +36,7 @@
                             $username = $_SESSION['user'][0];
                             $comparison = $userData->getUsername();
                             echo '<form action="search.php" method="post">' .
-                                '<tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                '<tr><td><img src="' . $userData->getProfilePicture() . '"</td>' .
                                 '<td><input type="hidden" name="friend" value="' . $userData->getUsername() .'">' . $userData->getUsername() . '</td>' .
                                 '<td>' . $userData->getName() . '</td>' .
                                 '<td>' . $userData->getEmailAddress() . '</td>' .
@@ -57,7 +57,7 @@
                 </thead>
                 <tbody>';
                         foreach ($view->usersDataSet as $userData) {
-                            echo '<tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                            echo '<tr><td><img src="' . $userData->getProfilePicture() . '"</td>' .
                                 '<td>' . $userData->getUsername() . '</td>' .
                                 '</tr>';
                         }
