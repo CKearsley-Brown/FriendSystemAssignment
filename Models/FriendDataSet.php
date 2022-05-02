@@ -117,14 +117,15 @@ class FriendDataSet
      * This is used to add a friend. The information on the friends
      * is collected and then inserted into the database.
      */
-    public function addFriend($user, $friend)
+    public function addFriend($friend)
     {
+        $userData = $_SESSION["user"];
+        $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
         $username = $user->getUsername();
 
-        echo $username;
-        echo $friend;
-        $sqlQuery = 'insert into Friends (sender, recipient, status) values ("' . $username . '","' . $friend .'",0)';
-
+        //echo $username;
+        //echo $friend;
+        $sqlQuery = 'INSERT INTO Friends VALUES ("' . $username . '","' . $friend .'",0)';
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
     }
@@ -133,8 +134,50 @@ class FriendDataSet
      * This method is used to see if the users are existing friends
      * on the site.
      */
-    public function friendCheck($user, $friend)
+    public function friendCheck($friend)
     {
+        $userData = $_SESSION["user"];
+        $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
+        $username = $user->getUsername();
 
+        $sqlQuery = 'SELECT * FROM Friends WHERE sender="' . $username . '" AND recipient="' . $friend . '" AND status=1 OR sender="' . $friend . '" AND recipient="' . $username . '" AND status=1';
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
+
+        $row = $statement->fetch();
+        var_dump($row);
+
+        if($row != null)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * This method confirms a friend request
+     */
+    public function confirmFriend($friend)
+    {
+        $userData = $_SESSION["user"];
+        $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
+        $username = $user->getUsername();
+
+        $sqlQuery = 'UPDATE Friends Set status=1 WHERE sender="' . $friend . '" AND recipient ="' . $username .'"';
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
+    }
+
+    /**
+     * This method rejects a friend request
+     */
+    public function rejectFriend($friend)
+    {
+        $userData = $_SESSION["user"];
+        $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
+        $username = $user->getUsername();
+
+        $sqlQuery = 'DELETE FROM Friends WHERE sender="' . $friend . '" AND recipient ="' . $username .'"';
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
     }
 }

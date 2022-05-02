@@ -15,6 +15,31 @@ if (isset($_SESSION['loggedIn'])) {
     }
 }
 
+//Used to accept or reject user's friend notifications
+if (isset($_POST['acceptButton'])) {
+    //var_dump($_POST['friend']);
+    $friendDataSet = new FriendDataSet();
+    if($friendDataSet->friendCheck($_POST['friend']) == false)
+    {
+        $friendDataSet->confirmFriend($_POST['friend']);
+    } else{
+        echo "already friends";
+    }
+    header("Refresh:0");
+}
+if (isset($_POST['rejectButton'])) {
+    $friendDataSet = new FriendDataSet();
+    if($friendDataSet->friendCheck($_POST['friend']) == false)
+    {
+        $friendDataSet->rejectFriend($_POST['friend']);
+    } else{
+        echo "already friends";
+    }
+    header("Refresh:0");
+}
+
+
+//Used to fetch all users and pass them onto the home page's view
 $usersDataSet = new UserDataSet();
 $view->usersDataSet = $usersDataSet->fetchAllUsers();
 

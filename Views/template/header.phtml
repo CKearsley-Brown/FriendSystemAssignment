@@ -53,15 +53,17 @@
             <?php
             if(isset($_SESSION['loggedIn'])) {
                 foreach ($view->userDataSet as $userData) {
-                    echo '<table id="notifications">
-                            <tbody>
-                                <tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
-                                '<td>' . $userData->getUsername() . '</td>' .
-                                '<td><button name="acceptButton" type="submit">Accept</input></td>' .
-                                '<td><button name="rejectButton" type="submit">Reject</input>.</td>' .
-                                '</tr>
-                            </tbody>
-                        </table>';
+                    echo '<form action="home.php" method="post">
+                            <table id="notifications">
+                                <tbody>
+                                    <tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                    '<td><input type="hidden" name="friend" value="' . $userData->getUsername() .'">' . $userData->getUsername() . '</td>' .
+                                    '<td><button name="acceptButton" type="submit">Accept</button></td>' .
+                                    '<td><button name="rejectButton" type="submit">Reject</button></td>' .
+                                    '</tr>
+                                </tbody>
+                            </table>
+                           </form>';
                 }
             }
             else{

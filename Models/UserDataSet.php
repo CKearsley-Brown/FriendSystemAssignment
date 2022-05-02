@@ -115,7 +115,7 @@ class UserDataSet {
      * the Friend Data Set to get this information and then is able
      * to return the friend's information.
      */
-    public function fetchFriends($user) {
+    public function fetchFriends() {
         $friendData = new FriendDataSet();
         $friends = $friendData->showFriends();
 
@@ -161,7 +161,7 @@ class UserDataSet {
     }
 
     /**
-     * This method is search for users in the user database. It does
+     * This method searches for users in the user database. It does
      * this through a search in the database via SQL. It will then
      * return this information.
      */

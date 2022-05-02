@@ -1,8 +1,8 @@
 <?php require('template/header.phtml') ?>
-
     <h3>Search</h3>
     <p>
-        Here are your search results.
+        <?php echo $resultsMessage?>
+    </p>
     <hr>
     <h3>List of users!</h3>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
@@ -21,11 +21,20 @@
                             <th>Latitude</th>
                             <th>Longitude</th>
                             <th></th>
-                            </tr>
+                          </tr>
                 </thead>
                 <tbody>';
+                    function hidden($username, $comparison)
+                    {
+                        $hidden = "";
+                        if($username === $comparison)
+                            $hidden = "hidden";
+                        return $hidden;
+                    }
                     if ($_SESSION['loggedIn']) {
                         foreach ($view->usersDataSet as $userData) {
+                            $username = $_SESSION['user'][0];
+                            $comparison = $userData->getUsername();
                             echo '<form action="search.php" method="post">' .
                                 '<tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
                                 '<td><input type="hidden" name="friend" value="' . $userData->getUsername() .'">' . $userData->getUsername() . '</td>' .
@@ -34,7 +43,7 @@
                                 '<td>' . $userData->getActivityTime() . '</td>' .
                                 '<td>' . $userData->getLatitude() . '</td>' .
                                 '<td>' . $userData->getLongitude() . '</td>' .
-                                '<td><button name="addButton" type="submit">Add</input></td>' .
+                                '<td ' .  hidden($username,$comparison) . '><button name="addButton" type="submit">Add</button></td>' .
                                 '</tr></form>';
                         }
                     }
