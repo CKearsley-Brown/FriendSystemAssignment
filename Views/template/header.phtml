@@ -56,7 +56,7 @@
                     echo '<form action="home.php" method="post">
                             <table id="notifications">
                                 <tbody>
-                                    <tr><td><img src="/images/' . $userData->getProfilePicture() . '"</td>' .
+                                    <tr><td><img src="' . $userData->getProfilePicture() . '"</td>' .
                                     '<td><input type="hidden" name="friend" value="' . $userData->getUsername() .'">' . $userData->getUsername() . '</td>' .
                                     '<td><button name="acceptButton" type="submit">Accept</button></td>' .
                                     '<td><button name="rejectButton" type="submit">Reject</button></td>' .
