@@ -19,7 +19,7 @@
     <hr>
     <!--
     <h3>List of current users!</h3>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
+    <form action="<?php //echo $_SERVER['PHP_SELF']; ?>" method="post" id="table">
         <div class="col-auto">
             <table class="table table-bordered table-responsive">
                 <thead>
@@ -34,16 +34,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($view->usersDataSet as $userData) {
+                <?php /* foreach ($view->usersDataSet as $userData) {
                     echo '<tr><td>' . $userData->getUsername() . '</td>' .
                         '<td>' . $userData->getName() . '</td>' .
                         '<td>' . $userData->getEmailAddress() . '</td>' .
-                        '<td><img src="/images/'. $userData->getProfilePicture() . '"</td>' .
+                        '<td><img src="'. $userData->getProfilePicture() . '"</td>' .
                         '<td>' . $userData->getActivityTime() . '</td>' .
                         '<td>' . $userData->getLatitude() . '</td>' .
                         '<td>' . $userData->getLongitude() . '</td>' .
                         '</tr>';
-                } ?>
+                } */?>
                 </tbody>
             </table>
         </div>

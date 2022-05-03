@@ -203,7 +203,6 @@ class UserDataSet {
      */
     public function getNumberOfUsers($user) {
         $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '"';
-
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
 
@@ -213,5 +212,15 @@ class UserDataSet {
         }
 
         return count($dataSet);
+    }
+
+    /**
+     * This method updates the user's latitude and longitude
+     * information within the database.
+     */
+    public function updateCoordinates($user, $latitude, $longitude) {
+        $sqlQuery = 'UPDATE User SET latitude = ' . $latitude . ', longitude = ' . $longitude . ' WHERE username = "' . $user .'"';
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
     }
 }
