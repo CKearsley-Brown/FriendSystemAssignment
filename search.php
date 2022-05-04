@@ -2,7 +2,6 @@
 //Login controller is used to detect if user is logged in
 require("logincontroller.php");
 require_once('Models/FriendDataSet.php');
-require_once('Models/User.php');
 
 //Initialises objects
 $view = new stdClass();
@@ -29,10 +28,16 @@ $searchDataSet = new UserDataSet();
 $search="";
 
 //This is used to search users on the website
-if (isset($_POST["searchButton"])) {
+if (isset($_POST["searchButton"]) || isset($_GET['search'])) {
     $searchDataSet = new UserDataSet();
     //Orginal - $view->usersDataSet = $searchDataSet->searchUsers($_POST["search"]);
-    $search = $_POST["search"];
+    if(isset($_POST["searchButton"]))
+    {
+        $search = $_POST["search"];
+    } else
+    {
+        $search = $_GET['search'];
+    }
 
     $numberOfUsers = $searchDataSet->getNumberOfUsers($search);
     //var_dump($numberOfUsers);

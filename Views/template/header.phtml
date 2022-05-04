@@ -31,8 +31,10 @@
                 <li class="nav-item"><a class="nav-link" href="map.php">Map</a></li>
             </ul>
             <form method="post" action="search.php" id="search" class="form-inline">
-                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search" pattern="[^()/><\][\\\x22,;|]+">
+                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search" pattern="[^()/><\][\\\x22,;|]+" onkeyup="showHint(this.value)">
                 <button class="btn btn-outline-success my-2 my-sm-0" name="searchButton" type="submit">Search</button>
+                <!--<p style="display: inline; color: black; background-color: white; border: black solid 1px"><span id="txtHint"></span></p>-->
+                <ul class="list-group" id="txtHint" style="position: absolute; margin-top: 0; z-index: 1;color: black; background-color: white; color: black;"></ul>
             </form>
             <form id="logButton" method="post" action="logincontroller.php" class="form-inline">
                 <?php
@@ -44,6 +46,56 @@
                 }
                 ?>
             </form>
+            <script>
+                function showHint(str)
+                {
+                    /*
+                    if (str.length == 0) {
+                        document.getElementById("txtHint").innerHTML = "";
+                        return;
+                    } else {
+                        var xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if(this.readyState == 4 && this.status == 200) {
+                                var uic = document.getElementById("txtHint");
+                                console.log(uic.innerText);
+                                uic.innerHTML = this.responseText;
+                            }
+                        };
+                        xmlhttp.open("GET", "header.php?in=" + str, true);
+                        xmlhttp.send();
+                    }
+                     */
+
+                    if (str.length == 0) {
+                        document.getElementById("txtHint").innerHTML = "";
+                        return;
+                    } else {
+                        var xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if(this.readyState == 4 && this.status == 200) {
+                                var uic = document.getElementById("txtHint");
+                                console.log(this.response);
+
+                                if(this.response.length !== 0) {
+                                    uic.innerHTML = "<p style='width: 100px'>Users: </p>";
+                                    var users = JSON.parse(this.responseText);
+                                    users.forEach(function(obj) {
+                                        uic.innerHTML += "<a href='search.php?search=" + obj.username + "' style='background-color: white; color: black'><img style='max-width: 50px' src='" + obj.profilePicture + "'>" + obj.username + "</a><br/>";
+                                    })
+                                } else{
+                                    uic.innerHTML = "Users: <br/>";
+                                    uic.innerHTML += "<p>no user called this</p>";
+                                }
+                            }
+                        };
+                        xmlhttp.open("GET", "header.php?in=" + str, true);
+                        xmlhttp.send();
+                    }
+                }
+            </script>
         </nav>
     </div>
     <!--Main Body of the page starts here -->
