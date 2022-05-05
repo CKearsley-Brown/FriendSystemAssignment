@@ -7,58 +7,57 @@
 
 <p id="output"></p>
 
-<div id="Map" style="width:800px;height:600px"></div>
+<div id="Map" style="width:800px;height:600px" onmouseenter="loadFriends()"></div>
 <script src="/OpenLayers-2.13.1/OpenLayers.js"></script>
 <script>
-    var locations = [
-      ['Manly Beach', -33.800101, 151.28747820],['Bondi Beach', -33.890542, 151.157507]
-    ];
+    var friends = [];
+    function loadFriends(){
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if(this.readyState == 4 && this.status == 200) {
+                if(this.response.length !== 0)
+                {
+                    //console.log(this.response);
+                    friends = JSON.parse(this.responseText);
+                    console.log(friends);
+                    markers.clearMarkers();
+                    friends.forEach(createMarker);
+                }
+            }
+        }
+        xmlhttp.open("GET", "friendsajax.php", false);
+        xmlhttp.send();
+    }
 
     map = new OpenLayers.Map("Map");
-    map.addLayer(new OpenLayers.Layer.OSM());
+    mapnik = new OpenLayers.Layer.OSM();
+    map.addLayer(mapnik);
 
-    var lonLat = new OpenLayers.LonLat( 151.274856,-33.89).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+    var lonLat = new OpenLayers.LonLat( 0, 40).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
 
-    var zoom=10;
+    var zoom=3;
 
     var markers = new OpenLayers.Layer.Markers( "Markers" );
     map.addLayer(markers);
 
-    function createMarker(item)
+    friends.forEach(function(friend)
+    {
+        console.log(friend.username);
+    })
+
+    function createMarker(friend)
     {
         //Test
-        console.log[item[0], item[1], item[2]];
+        console.log(friend.username);
         //Creating Marker
-        let mposition = new OpenLayers.LonLat( item[2] ,item[1] ).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+        let mposition = new OpenLayers.LonLat( friend.longitude , friend.latitude ).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
         markers.addMarker(new OpenLayers.Marker(mposition));
     }
 
-    locations.forEach(createMarker);
-
     map.setCenter (lonLat, zoom);
-</script>
-<script>
-    function success() {
-        console.log("Success");
-    }
 
-    function error() {
-        console.log("Failure");
-    }
-
-    function giveCoordinates(lat,long)
-    {
-        var out = document.getElementById("output");
-        out.innerHTML = "Your Latitude is " + lat + " and your Longitude is " + long;
-
-        document.cookie = 'latitude = ' + lat;
-        document.cookie = 'longitude = ' + long;
-    }
-
-    navigator.geolocation.getCurrentPosition(function (position)
-    {
-        giveCoordinates(position.coords.latitude,position.coords.longitude);
-    });
+    loadFriends();
 </script>
 
 </div>

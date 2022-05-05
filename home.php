@@ -2,6 +2,7 @@
 //Login controller is used to detect if user is logged in
 require_once('Models/UserDataSet.php');
 require("logincontroller.php");
+require_once('location.php');
 
 //Initialises objects
 $view = new stdClass();

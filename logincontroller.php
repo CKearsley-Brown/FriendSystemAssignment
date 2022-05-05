@@ -18,7 +18,7 @@ if (isset($_POST["loginButton"])) {
 
     if($check == true)
     {
-        echo "You are logged in";
+        //echo "You are logged in";
         $_SESSION["login"] = $username;
         $_SESSION["loggedIn"] = true;
 

@@ -2,6 +2,7 @@
 //Login controller is used to detect if user is logged in
 require("logincontroller.php");
 require_once('Models/FriendDataSet.php');
+require_once('location.php');
 
 //Initialises objects
 $view = new stdClass();
@@ -19,7 +20,7 @@ if (isset($_SESSION['loggedIn'])) {
 if (isset($_SESSION['loggedIn'])) {
     if ($_SESSION['loggedIn']) {
         $friendsDataSet = new UserDataSet();
-        $view->usersDataSet = $friendsDataSet->fetchFriends($_SESSION["user"]);
+        $view->usersDataSet = $friendsDataSet->fetchFriends();
     }
 }
 

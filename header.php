@@ -15,14 +15,13 @@ if($_REQUEST["in"]!="") {
     $results = $userDataSet->searchUsers($in);
 
     $userData = array();
-    $num = 0;
 
     foreach ($results as $result) {
         $user = array('username' => $result->getUsername(), 'name' => $result->getName(), 'password' => $result->getPassword(), 'emailAddress' => $result->getEmailAddress(), 'profilePicture' => $result->getProfilePicture(), 'activityTime' => $result->getActivityTime(), 'latitude' => $result->getLatitude(), 'longitude' => $result->getLongitude());
         array_push($userData, $user);
     }
+    echo json_encode($userData);
 }
-echo json_encode($userData);
 
 // Orginal Suggestion List
 /*

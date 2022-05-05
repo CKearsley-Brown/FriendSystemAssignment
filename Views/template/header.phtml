@@ -15,6 +15,7 @@
     <link href="/css/my-style.css" rel="stylesheet">
 
     <title>Best Teas - <?php echo $view->pageTitle; ?></title>
+    <script src="/js/location.js"></script>
 </head>
 <body role="document">
 <div class="container-fluid"
@@ -77,7 +78,7 @@
                         xmlhttp.onreadystatechange = function () {
                             if(this.readyState == 4 && this.status == 200) {
                                 var uic = document.getElementById("txtHint");
-                                console.log(this.response);
+                                //console.log(this.response);
 
                                 if(this.response.length !== 0) {
                                     uic.innerHTML = "<p style='width: 100px'>Users: </p>";
