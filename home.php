@@ -12,7 +12,7 @@ $view->pageTitle = 'Home';
 if (isset($_SESSION['loggedIn'])) {
     if ($_SESSION['loggedIn']) {
         $friendNotificationDataSet = new UserDataSet();
-        $view->userDataSet = $friendNotificationDataSet->fetchNotificaitons($_SESSION["user"]);
+        $view->userDataSet = $friendNotificationDataSet->fetchNotifications($_SESSION["user"]); //gets friend's data for the people who have sent a notification
     }
 }
 
@@ -20,20 +20,20 @@ if (isset($_SESSION['loggedIn'])) {
 if (isset($_POST['acceptButton'])) {
     //var_dump($_POST['friend']);
     $friendDataSet = new FriendDataSet();
-    if($friendDataSet->friendCheck($_POST['friend']) == false)
+    if($friendDataSet->friendCheck($_POST['friend']) == false) //checks if the users are already friends
     {
-        $friendDataSet->confirmFriend($_POST['friend']);
+        $friendDataSet->confirmFriend($_POST['friend']); //updates database to show that users are now friends
     } else{
         echo "already friends";
     }
-    header("Refresh:0");
+    header("Refresh:0"); //refreshes page
 }
 
 //Used to reject user's friend notifications
 if (isset($_POST['rejectButton'])) {
     $friendDataSet = new FriendDataSet();
     $friendDataSet->rejectFriend($_POST['friend']);
-    header("Refresh:0");
+    header("Refresh:0"); //refreshes page
 }
 
 

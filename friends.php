@@ -12,7 +12,7 @@ $view->pageTitle = 'Friends';
 if (isset($_SESSION['loggedIn'])) {
     if ($_SESSION['loggedIn']) {
         $friendNotificationDataSet = new UserDataSet();
-        $view->userDataSet = $friendNotificationDataSet->fetchNotificaitons($_SESSION["user"]);
+        $view->userDataSet = $friendNotificationDataSet->fetchNotifications($_SESSION["user"]);
     }
 }
 

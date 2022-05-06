@@ -11,9 +11,10 @@ if (isset($_POST["confirmButton"]))
 
     $userDataSet = new UserDataSet();
 
+    //Sets the registered users information within the database
     $result = $userDataSet->registerUser($_POST["username"], $_POST["name"], $_POST["password"], $_POST["email"], "/images/default_img.png", 0, NULL, NULL);
 
-    //Message to the user
+    //Resulting message to the user
     if($result == false)
     {
         $message = 'There was an error in creating the user';

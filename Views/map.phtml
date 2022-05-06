@@ -3,107 +3,107 @@
 <h3>Welcome to the Map Page</h3>
 <p>
     <?php
-    if (isset($_SESSION['loggedIn'])) {
+    if (!isset($_SESSION['loggedIn'])) {
+        echo 'You need to be logged in to use the map.';
+    } elseif(!isset($_COOKIE['latitude'])){
+        echo 'You must turn on the use of location to use the map.';
+    }
+    else {
         echo 'This map allows you to track the location of mutually accepted friends in real time. The blue marker is you and the red markers are your 
         friends. Click the markers to obtain the friend\'s information.';
-    } else {
-        echo 'You need to be logged in to use the map.';
     }
      ?>
 </p>
-<div id="Map" onmouseenter="loadFriends()" 	class=".col-lg-10"<?php if(!isset($_SESSION['loggedIn'])) {echo 'hidden';}?>></div>
+<div id="Map" onmouseenter="loadFriends()" 	class=".col-lg-10"<?php if(!isset($_SESSION['loggedIn']) || !isset($_COOKIE['latitude'])) {echo 'hidden';}?>></div>
 <script src="/OpenLayers-2.13.1/OpenLayers.js"></script>
 <script>
-    var friends = [];
-    function loadFriends(){
-        var xmlhttp = new XMLHttpRequest();
+    var friends = []; //the array for friends to be inputted is initialised
+    function loadFriends(){ //this function resets and updates all markers on the map when the appropriate event has occurred
+        var xmlhttp = new XMLHttpRequest(); //initialisation of XMLHttpRequest
 
-        xmlhttp.onreadystatechange = function () {
-            if(this.readyState == 4 && this.status == 200) {
-                if(this.response.length !== 0)
+        xmlhttp.onreadystatechange = function () {//this function runs whenever the users mouse enters the map div
+            if(this.readyState == 4 && this.status == 200) {//if the function has run correctly, the following output is run
+                if(this.response.length !== 0) //a check if the returned information from the AJAX call doesn't equal nothing
                 {
                     //console.log(this.response);
-                    friends = JSON.parse(this.responseText);
+                    friends = JSON.parse(this.responseText); //the friends array is set as the JSON converted data
                     //console.log(friends);
-                    vectorLayer.destroyFeatures();
-                    createUserFeature();
-                    friends.forEach(createFriendFeatures);
-                    map.addLayer(vectorLayer);
+                    vectorLayer.destroyFeatures(); //destroys all markers
+                    createUserFeature(); //creates the user marker
+                    friends.forEach(createFriendFeatures); //creates all friend markers
+                    map.addLayer(vectorLayer); //adds markers onto the map
                 }
             }
         }
-        xmlhttp.open("GET", "friendsajax.php?check=friend", false);
-        xmlhttp.send();
+        xmlhttp.open("GET", "friendsajax.php", false); //prepares AJAX call
+        xmlhttp.send(); //sends AJAX call
     }
 
-    map = new OpenLayers.Map("Map");
-    mapnik = new OpenLayers.Layer.OSM();
-    map.addLayer(mapnik);
+    map = new OpenLayers.Map("Map"); //initialises the map
+    mapnik = new OpenLayers.Layer.OSM(); //initialises a map layer
+    map.addLayer(mapnik); //add map layer to map
 
     epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
     projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
 
-    var lonLat = new OpenLayers.LonLat( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo);
+    var lonLat = new OpenLayers.LonLat( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo); //sets the longitude and latitude which is set to where the user is
 
-    var zoom=12;
+    var zoom=12; //sets how far the map should be zoomed in when it has been created
     //Code to set the map
-    map.setCenter (lonLat, zoom);
+    map.setCenter (lonLat, zoom); //sets the initial focus of the map
 
-    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+    var vectorLayer = new OpenLayers.Layer.Vector("Overlay"); //sets layer for the markers
 
-    //Define markers as "features" of the vector layer
+    //creates markers through defining them as features
     function createUserFeature()
     {
-        var userFeature = new OpenLayers.Feature.Vector(
-            new OpenLayers.Geometry.Point( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo),
-            {description:'This is you.'} ,
-            {externalGraphic: '../images/user.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+        var userFeature = new OpenLayers.Feature.Vector( //creates new feature
+            new OpenLayers.Geometry.Point( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo), //sets marker to user's longitude and latitude
+            {description:'This is you.'} , //the description to be used in the cloud pop up
+            {externalGraphic: '../images/user.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  } //the marker's graphic
         );
-        vectorLayer.addFeatures(userFeature);
+        vectorLayer.addFeatures(userFeature); //adding marker onto layer
     }
 
     function createFriendFeatures(friend)
     {
         //Test
-        console.log(friend.username);
+        //console.log(friend.username);
         //Creating Marker
-        var friendFeature = new OpenLayers.Feature.Vector(
-            new OpenLayers.Geometry.Point( friend.longitude, friend.latitude ).transform(epsg4326, projectTo),
-            {description:'<img style="max-width: 50px; align-items: center" src="' + friend.profilePicture +'">' + ' <p> Username: ' + friend.username + '</p>' + ' <p> Name: ' + friend.name + '</p>' + ' <p> Latitude: ' + friend.latitude + '</p>' + ' <p> Longitude: ' + friend.longitude + '</p>'} ,
-            {externalGraphic: '../images/marker.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+        var friendFeature = new OpenLayers.Feature.Vector( //creates new feature
+            new OpenLayers.Geometry.Point( friend.longitude, friend.latitude ).transform(epsg4326, projectTo), //sets marker to friend's longitude and latitude
+            {description:'<img style="max-width: 50px; align-items: center" src="' + friend.profilePicture +'">' + ' <p> Username: ' + friend.username + '</p>' + ' <p> Name: ' + friend.name + '</p>' + ' <p> Latitude: ' + friend.latitude + '</p>' + ' <p> Longitude: ' + friend.longitude + '</p>'} , //the description to be used in the cloud pop up
+            {externalGraphic: '../images/marker.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  } //the marker's graphic
         );
-        vectorLayer.addFeatures(friendFeature);
+        vectorLayer.addFeatures(friendFeature); //adding marker onto layer
     }
 
-    map.addLayer(vectorLayer);
+    map.addLayer(vectorLayer); //adding marker layer onto the map
 
-    //Add a selector control to the vectorLayer with popup functions
+    //adds selector control to the vectorLayer with popup functions
     var controls = {
-        selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
+        selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup }) //defines what functions should be called on particular actions
     };
 
+    //function to create a pop up
     function createPopup(feature) {
         feature.popup = new OpenLayers.Popup.FramedCloud("pop",
-            feature.geometry.getBounds().getCenterLonLat(),
-            null,
-            '<div class="markerContent">'+feature.attributes.description+'</div>',
-            null,
-            true,
-            function() { controls['selector'].unselectAll(); }
-        );
+            feature.geometry.getBounds().getCenterLonLat(), null, '<div class="markerContent">'+feature.attributes.description+'</div>', null, true, function() { controls['selector'].unselectAll(); }); //defines the cloud pop up
         //feature.popup.closeOnMove = true;
-        map.addPopup(feature.popup);
+        map.addPopup(feature.popup); //adds pop up to the map
     }
 
+    //function to destroy pop up
     function destroyPopup(feature) {
         feature.popup.destroy();
         feature.popup = null;
     }
 
-    map.addControl(controls['selector']);
-    controls['selector'].activate();
+    map.addControl(controls['selector']); //adds the initialised controls to the map
+    controls['selector'].activate(); //activates controls
 
-    loadFriends();
+    createUserFeature(); //loads initial user marker
+    loadFriends(); //loads initial friend markers
 </script>
 
 </div>

@@ -3,24 +3,18 @@ require_once('Models/UserDataSet.php');
 
 $userDataSet = new UserDataSet();
 
-if(isset($_REQUEST["in"]))
-{
-    $in = $_REQUEST["in"];
-}
-else{
-    $in = "";
-}
+if($_REQUEST["in"]!="") { //if the request sent by the XMLHttpRequest is not blank, the following instructions will run
+    $results = $userDataSet->searchUsers($_REQUEST["in"]); //the information within the request is searched in the database, this function include a limit to just 10 users to be outputted
 
-if($_REQUEST["in"]!="") {
-    $results = $userDataSet->searchUsers($in);
+    $userData = array(); //initialisation of the user data to be sent
 
-    $userData = array();
-
+    //each result from the searched user will be inputted into an array where each bit of information will be set a key and then pushed into an overall friends data
     foreach ($results as $result) {
         $user = array('username' => $result->getUsername(), 'name' => $result->getName(), 'password' => $result->getPassword(), 'emailAddress' => $result->getEmailAddress(), 'profilePicture' => $result->getProfilePicture(), 'activityTime' => $result->getActivityTime(), 'latitude' => $result->getLatitude(), 'longitude' => $result->getLongitude());
         array_push($userData, $user);
     }
-    echo json_encode($userData);
+    //sends the users data
+    echo json_encode($userData); //the data is wrapped in the json_encode method, so it can be used by javascript
 }
 
 // Orginal Suggestion List

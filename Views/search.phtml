@@ -1,7 +1,7 @@
 <?php require('template/header.phtml') ?>
     <h3>Search</h3>
     <p>
-        <?php echo $resultsMessage?>
+        <?php echo $resultsMessage //global variable that is set by the controller?>
     </p>
     <hr>
     <h3>List of users!</h3>
@@ -24,7 +24,7 @@
                           </tr>
                 </thead>
                 <tbody>';
-                    function hidden($username, $comparison)
+                    function hidden($username, $comparison) //function echo hidden if the user's username and the data's username is the same
                     {
                         $hidden = "";
                         if($username === $comparison)
@@ -32,7 +32,7 @@
                         return $hidden;
                     }
                     if ($_SESSION['loggedIn']) {
-                        foreach ($view->usersDataSet as $userData) {
+                        foreach ($view->usersDataSet as $userData) { //displays all user data if the user is logged in
                             $username = $_SESSION['user'][0];
                             $comparison = $userData->getUsername();
                             echo '<form action="search.php" method="post">' .
@@ -56,7 +56,7 @@
                 </tr>
                 </thead>
                 <tbody>';
-                        foreach ($view->usersDataSet as $userData) {
+                        foreach ($view->usersDataSet as $userData) { //this table only displays two sections of user information, if the user is not logged in
                             echo '<tr><td><img src="' . $userData->getProfilePicture() . '"</td>' .
                                 '<td>' . $userData->getUsername() . '</td>' .
                                 '</tr>';
@@ -65,7 +65,7 @@
                 </tbody>
             </table>
             <?php
-            for($page=1; $page<=$view->numberOfPages;$page++)
+            for($page=1; $page<=$view->numberOfPages;$page++) //creates a page for each number of pages there has been set in the controller
             {
                 echo '<a id="paginationNum" href="search.php?page=' . $page . '">' . $page . '</a> ';
             }

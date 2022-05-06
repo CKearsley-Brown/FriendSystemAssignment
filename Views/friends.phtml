@@ -26,8 +26,8 @@
             </thead>
             <tbody>
             <?php
-            if(isset($_SESSION['loggedIn'])) {
-                foreach ($view->usersDataSet as $userData) {
+            if(isset($_SESSION['loggedIn'])) { //if the user is logged in, the user's friends table will display
+                foreach ($view->usersDataSet as $userData) { //each user data in the data set is displayed within a table
                     echo '<tr><td>' . $userData->getUsername() . '</td>' .
                         '<td>' . $userData->getName() . '</td>' .
                         '<td>' . $userData->getEmailAddress() . '</td>' .

@@ -19,31 +19,35 @@ class FriendDataSet
     }
 
     /**
-     * This retrieves all information in the friends database.
+     * This retrieves and returns all information in the friends database.
+     *
+     * @return array $dataset
      */
     public function fetchAllFriends() {
-        $sqlQuery = 'SELECT * FROM Friends';
+        $sqlQuery = 'SELECT * FROM Friends'; //this SQL query selects all information from the friends table
 
-        echo $sqlQuery;
+        //echo $sqlQuery;
 
-        $statement = $this->_dbHandle->prepare($sqlQuery);
-        $statement->execute();
+        $statement = $this->_dbHandle->prepare($sqlQuery); //prepares SQL statement
+        $statement->execute(); //executes SQL statement
 
-        $dataSet=[];
+        $dataSet=[]; //initialises array for the dataset to be inputted
         while ($row = $statement->fetch()) {
-            $dataSet[] = new FriendData($row);
+            $dataSet[] = new FriendData($row); //each row is inputted into the dataset
         }
-        return $dataSet;
+        return $dataSet; //returns dataset
     }
 
     /**
-     * This method is used to view in the database, which confirmed friends
-     * the user has. It does this by retrieving the row of friends that the
+     * This method is used to view which confirmed friends the user has
+     * in the database. It does this by retrieving the row of friends that the
      * user is involved with. The user is then removed from the row, so it
      * returns an array of friends.
+     *
+     * @return array $friends
      */
     public function showFriends(){
-        $userData = $_SESSION["user"];
+        $userData = $_SESSION["user"]; //Retrieves the current user's information
         $user = new User($userData[0], $userData[1], $userData[2], $userData[3], $userData[4], $userData[5], $userData[6], $userData[7]);
         //var_dump($user);
         $username = $user->getUsername();
@@ -80,7 +84,13 @@ class FriendDataSet
     }
 
     /**
-     * This function is used is to show friend requests to the user.
+     * This function is used is to show friend requests to the user. It does this by
+     * obtaining the users information and then using the information within
+     * an SQL statement. The statement check if there is a relationship in the database
+     * that has not yet been set as a friend. The user is then removed from the row.
+     * The friend requesters information is then returned.
+     *
+     * @return array $requests
      */
     public function showFriendRequests(){
         $userData = $_SESSION["user"];
@@ -114,8 +124,13 @@ class FriendDataSet
     }
 
     /**
-     * This is used to add a friend. The information on the friends
-     * is collected and then inserted into the database.
+     * This is used to add a friend (send a notification). The
+     * user's and friend's username is obtained and placed
+     * in the database that represents relationships between
+     * users. It is set a value to indicate that they are not
+     * yet friends.
+     *
+     * @param String $friend
      */
     public function addFriend($friend)
     {
@@ -132,7 +147,15 @@ class FriendDataSet
 
     /**
      * This method is used to see if the users are existing friends
-     * on the site.
+     * on the site. This is done by obtaining the user's and possible
+     * friend's username. They are placed within an SQL statement that check
+     * if any row indicates that the users are existing friends.
+     * If the resulting statement is null, it indicates that they are
+     * not friends and the opposite indicates that they are existing
+     * friends. This information is passed via a boolean statement.
+     *
+     * @return array $dataset
+     * @return boolean
      */
     public function friendCheck($friend)
     {
@@ -154,7 +177,14 @@ class FriendDataSet
     }
 
     /**
-     * This method confirms a friend request
+     * This method confirms a friend request. This is done by
+     * obtaining the user's and possible friend's username. The
+     * existing relationship within the database that indicated
+     * a notification had been sent is now set to one that indicate
+     * that they are friends. A deletion is attempted on a possible
+     * existing request from the receiver to the sender.
+     *
+     * @param $friend
      */
     public function confirmFriend($friend)
     {
@@ -176,7 +206,11 @@ class FriendDataSet
     }
 
     /**
-     * This method rejects a friend request
+     * This method rejects a friend request. This is done by
+     * obtaining the user's and possible friend's username. The
+     * existing relationship within the database that indicated
+     * that a notification had been sent will be deleted from the
+     * database.
      */
     public function rejectFriend($friend)
     {

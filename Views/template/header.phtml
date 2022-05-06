@@ -50,7 +50,7 @@
                 ?>
             </form>
             <script>
-                function showHint(str)
+                function showHint(str) //this function is used to show possible users that are being typed into a textfield
                 {
                     /*
                     if (str.length == 0) {
@@ -73,19 +73,19 @@
 
                     if (str.length == 0) {
                         document.getElementById("txtHint").innerHTML = "";
-                        return;
+                        return; //an empty string is returned to the list if nothing is inputted into it
                     } else {
-                        var xmlhttp = new XMLHttpRequest();
+                        var xmlhttp = new XMLHttpRequest(); //initialisation of XMLHttpRequest
 
-                        xmlhttp.onreadystatechange = function () {
-                            if(this.readyState == 4 && this.status == 200) {
-                                var uic = document.getElementById("txtHint");
+                        xmlhttp.onreadystatechange = function () { //a function is run whenever the state of the textfield changes
+                            if(this.readyState == 4 && this.status == 200) { //if the function has run correctly, the following output is run
+                                var uic = document.getElementById("txtHint");  //uic is set as the html list
                                 //console.log(this.response);
 
-                                if(this.response.length !== 0) {
+                                if(this.response.length !== 0) { //if the response doesn't equal nothing, each user within returned array will be added onto a list
                                     uic.innerHTML = "<p style='width: 100px'>Users: </p>";
-                                    var users = JSON.parse(this.responseText);
-                                    users.forEach(function(obj) {
+                                    var users = JSON.parse(this.responseText); //the returned data from php is converted to JSON
+                                    users.forEach(function(obj) { //each user in the JSON variable is added to the list
                                         uic.innerHTML += "<a href='search.php?search=" + obj.username + "' style='background-color: white; color: black'><img style='max-width: 50px' src='" + obj.profilePicture + "'>" + obj.username + "</a><br/>";
                                     })
                                 } else{
@@ -94,8 +94,8 @@
                                 }
                             }
                         };
-                        xmlhttp.open("GET", "header.php?in=" + str, true);
-                        xmlhttp.send();
+                        xmlhttp.open("GET", "header.php?in=" + str, true); //prepares AJAX call and passes inputted str for the database to use
+                        xmlhttp.send(); //sends AJAX call
                     }
                 }
             </script>
