@@ -166,7 +166,7 @@ class UserDataSet {
      * return this information.
      */
     public function searchUsers($user) {
-        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '"';
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "' . $user . '%" OR name LIKE "' . $user . '%" LIMIT 0,10';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
@@ -184,7 +184,7 @@ class UserDataSet {
      * via SQL. It will then return this information.
      */
     public function paginationSearchUsers($user, $startingLimit, $limit) {
-        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '" LIMIT ' . $startingLimit . ', ' . $limit . ' ';
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "' . $user . '%" OR name LIKE "' . $user . '%" LIMIT ' . $startingLimit . ', ' . $limit . ' ';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
@@ -202,7 +202,7 @@ class UserDataSet {
      * return this information.
      */
     public function getNumberOfUsers($user) {
-        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "%' . $user . '" OR name LIKE "%' . $user . '"';
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "' . $user . '%" OR name LIKE "' . $user . '%"';
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute();
 

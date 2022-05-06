@@ -14,6 +14,8 @@
     <link href="/css/bootstrap-theme.css" rel="stylesheet">
     <link href="/css/my-style.css" rel="stylesheet">
 
+    <link rel="icon" href="/images/logo.jpg">
+
     <title>Best Teas - <?php echo $view->pageTitle; ?></title>
     <script src="/js/location.js"></script>
 </head>
@@ -32,7 +34,7 @@
                 <li class="nav-item"><a class="nav-link" href="map.php">Map</a></li>
             </ul>
             <form method="post" action="search.php" id="search" class="form-inline">
-                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search" pattern="[^()/><\][\\\x22,;|]+" onkeyup="showHint(this.value)">
+                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search" pattern="[^()/><\][\\\x22,;|]+" onkeyup="showHint(this.value)" autocomplete="off">
                 <button class="btn btn-outline-success my-2 my-sm-0" name="searchButton" type="submit">Search</button>
                 <!--<p style="display: inline; color: black; background-color: white; border: black solid 1px"><span id="txtHint"></span></p>-->
                 <ul class="list-group" id="txtHint" style="position: absolute; margin-top: 0; z-index: 1;color: black; background-color: white; color: black;"></ul>

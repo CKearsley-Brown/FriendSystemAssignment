@@ -140,3 +140,15 @@ table img {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+/*Map Page CSS*/
+#Map {
+    width: 63vw;
+    height: 60vh;
+    border: solid 3px black;
+}
+
+.markerContent {
+    text-align: center;
+    color: blue;
+}

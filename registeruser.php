@@ -11,7 +11,7 @@ if (isset($_POST["confirmButton"]))
 
     $userDataSet = new UserDataSet();
 
-    $result = $userDataSet->registerUser($_POST["username"], $_POST["name"], $_POST["password"], $_POST["email"], "default_img.png", 0, 0, 0);
+    $result = $userDataSet->registerUser($_POST["username"], $_POST["name"], $_POST["password"], $_POST["email"], "/images/default_img.png", 0, NULL, NULL);
 
     //Message to the user
     if($result == false)

@@ -21,7 +21,7 @@ if (isset($_SESSION['loggedIn'])) {
 }
 
 //Pagination
-$resultPerPage = 10;
+$resultPerPage = 30;
 $searchDataSet = new UserDataSet();
 //$numberOfUsers = $searchDataSet->getNumberOfUsers();
 //$view->numberOfPages = ceil($numberOfUsers/$resultPerPage);

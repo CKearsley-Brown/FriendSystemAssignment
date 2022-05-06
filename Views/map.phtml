@@ -2,12 +2,16 @@
 
 <h3>Welcome to the Map Page</h3>
 <p>
-    This map allows you to track the location of mutually accepted friends in real time.
+    <?php
+    if (isset($_SESSION['loggedIn'])) {
+        echo 'This map allows you to track the location of mutually accepted friends in real time. The blue marker is you and the red markers are your 
+        friends. Click the markers to obtain the friend\'s information.';
+    } else {
+        echo 'You need to be logged in to use the map.';
+    }
+     ?>
 </p>
-
-<p id="output"></p>
-
-<div id="Map" style="width:800px;height:600px" onmouseenter="loadFriends()"></div>
+<div id="Map" onmouseenter="loadFriends()" 	class=".col-lg-10"<?php if(!isset($_SESSION['loggedIn'])) {echo 'hidden';}?>></div>
 <script src="/OpenLayers-2.13.1/OpenLayers.js"></script>
 <script>
     var friends = [];
@@ -20,13 +24,15 @@
                 {
                     //console.log(this.response);
                     friends = JSON.parse(this.responseText);
-                    console.log(friends);
-                    markers.clearMarkers();
-                    friends.forEach(createMarker);
+                    //console.log(friends);
+                    vectorLayer.destroyFeatures();
+                    createUserFeature();
+                    friends.forEach(createFriendFeatures);
+                    map.addLayer(vectorLayer);
                 }
             }
         }
-        xmlhttp.open("GET", "friendsajax.php", false);
+        xmlhttp.open("GET", "friendsajax.php?check=friend", false);
         xmlhttp.send();
     }
 
@@ -34,28 +40,68 @@
     mapnik = new OpenLayers.Layer.OSM();
     map.addLayer(mapnik);
 
-    var lonLat = new OpenLayers.LonLat( 0, 40).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+    epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+    projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
 
-    var zoom=3;
+    var lonLat = new OpenLayers.LonLat( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo);
 
-    var markers = new OpenLayers.Layer.Markers( "Markers" );
-    map.addLayer(markers);
+    var zoom=12;
+    //Code to set the map
+    map.setCenter (lonLat, zoom);
 
-    friends.forEach(function(friend)
+    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+
+    //Define markers as "features" of the vector layer
+    function createUserFeature()
     {
-        console.log(friend.username);
-    })
+        var userFeature = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point( <?php echo $_SESSION['user'][7]?>, <?php echo $_SESSION['user'][6]?>).transform(epsg4326, projectTo),
+            {description:'This is you.'} ,
+            {externalGraphic: '../images/user.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+        );
+        vectorLayer.addFeatures(userFeature);
+    }
 
-    function createMarker(friend)
+    function createFriendFeatures(friend)
     {
         //Test
         console.log(friend.username);
         //Creating Marker
-        let mposition = new OpenLayers.LonLat( friend.longitude , friend.latitude ).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-        markers.addMarker(new OpenLayers.Marker(mposition));
+        var friendFeature = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point( friend.longitude, friend.latitude ).transform(epsg4326, projectTo),
+            {description:'<img style="max-width: 50px; align-items: center" src="' + friend.profilePicture +'">' + ' <p> Username: ' + friend.username + '</p>' + ' <p> Name: ' + friend.name + '</p>' + ' <p> Latitude: ' + friend.latitude + '</p>' + ' <p> Longitude: ' + friend.longitude + '</p>'} ,
+            {externalGraphic: '../images/marker.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+        );
+        vectorLayer.addFeatures(friendFeature);
     }
 
-    map.setCenter (lonLat, zoom);
+    map.addLayer(vectorLayer);
+
+    //Add a selector control to the vectorLayer with popup functions
+    var controls = {
+        selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
+    };
+
+    function createPopup(feature) {
+        feature.popup = new OpenLayers.Popup.FramedCloud("pop",
+            feature.geometry.getBounds().getCenterLonLat(),
+            null,
+            '<div class="markerContent">'+feature.attributes.description+'</div>',
+            null,
+            true,
+            function() { controls['selector'].unselectAll(); }
+        );
+        //feature.popup.closeOnMove = true;
+        map.addPopup(feature.popup);
+    }
+
+    function destroyPopup(feature) {
+        feature.popup.destroy();
+        feature.popup = null;
+    }
+
+    map.addControl(controls['selector']);
+    controls['selector'].activate();
 
     loadFriends();
 </script>

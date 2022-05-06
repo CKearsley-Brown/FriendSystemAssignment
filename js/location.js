@@ -7,7 +7,7 @@ function error() {
 }
 
 function giveCoordinates(lat, long) {
-    console.log(lat,long);
+    //console.log(lat,long);
 
     document.cookie = 'latitude = ' + lat;
     document.cookie = 'longitude = ' + long;
