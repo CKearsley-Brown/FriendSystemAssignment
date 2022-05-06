@@ -72,9 +72,10 @@ class UserDataSet {
      */
     public function makeUser($username)
     {
-        $sqlQuery = 'SELECT * FROM User WHERE username="' . $username . '"';
+        $sqlQuery = 'SELECT * FROM User WHERE username=?';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->bindParam(1,$username);
         $statement->execute();
 
         while ($row = $statement->fetch()) {
@@ -89,9 +90,10 @@ class UserDataSet {
      */
     public function loginCheck($username, $password)
     {
-        $sqlQuery = 'SELECT password FROM User WHERE username="' . $username . '"';
+        $sqlQuery = 'SELECT password FROM User WHERE username=?';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->bindParam(1,$username);
         $statement->execute();
 
         $result = $statement->fetchAll();
@@ -166,9 +168,11 @@ class UserDataSet {
      * return this information.
      */
     public function searchUsers($user) {
-        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "' . $user . '%" OR name LIKE "' . $user . '%" LIMIT 0,10';
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE ?"%" OR name LIKE ?"%" LIMIT 0,10';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->bindParam(1,$user);
+        $statement->bindParam(2,$user);
         $statement->execute();
 
         $dataSet=[];
@@ -184,9 +188,11 @@ class UserDataSet {
      * via SQL. It will then return this information.
      */
     public function paginationSearchUsers($user, $startingLimit, $limit) {
-        $sqlQuery = 'SELECT * FROM User WHERE username LIKE "' . $user . '%" OR name LIKE "' . $user . '%" LIMIT ' . $startingLimit . ', ' . $limit . ' ';
+        $sqlQuery = 'SELECT * FROM User WHERE username LIKE ?"%" OR name LIKE ?"%" LIMIT ' . $startingLimit . ', ' . $limit . ' ';
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->bindParam(1,$user);
+        $statement->bindParam(2,$user);
         $statement->execute();
 
         $dataSet=[];
